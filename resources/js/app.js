@@ -8,6 +8,20 @@ import Vue from 'vue'
 import Form from 'vform'
 window.Form = Form;
 
+// vform component importation
+import {
+  AlertError,
+  AlertErrors,
+  HasError,
+  AlertSuccess
+} from 'vform/src/components/bootstrap5'
+
+// vform components
+Vue.component(AlertSuccess.name, AlertSuccess)
+Vue.component(AlertError.name, AlertError)
+Vue.component(AlertErrors.name, AlertErrors)
+Vue.component(HasError.name, HasError)
+
 // Import VueRouter
 import VueRouter from 'vue-router'
 

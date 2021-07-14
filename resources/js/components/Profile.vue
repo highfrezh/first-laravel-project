@@ -73,21 +73,21 @@
                         <label for="inputName" class="col-sm-2 col-form-label">Name</label>
                         <div class="col-sm-10">
                           <input type="name" class="form-control" :class="{ 'is-invalid': form.errors.has('name') }" v-model="form.name" id="inputName" placeholder="Name">
-                          <!-- <HasError :form="form" field="name" /> -->
+                          <HasError :form="form" field="name" />
                         </div>
                       </div>
                       <div class="form-group row">
                         <label for="inputEmail" class="col-sm-2 col-form-label">Email</label>
                         <div class="col-sm-10">
                           <input type="email" class="form-control" :class="{ 'is-invalid': form.errors.has('email') }" v-model="form.email" id="inputEmail" placeholder="Email">
-                          <!-- <HasError :form="form" field="email" /> -->
+                          <HasError :form="form" field="email" />
                         </div>
                       </div>
                       <div class="form-group row">
                         <label for="inputExperience" class="col-sm-2 col-form-label">Experience</label>
                         <div class="col-sm-10">
                           <textarea type="name" class="form-control" :class="{ 'is-invalid': form.errors.has('name') }" v-model="form.bio" id="inputExperience" placeholder="Experience"></textarea>
-                          <!-- <HasError :form="form" field="name" /> -->
+                          <HasError :form="form" field="name" />
                         </div>
                       </div>
                       <div class="form-group row">

@@ -176,6 +176,9 @@ class UserController extends Controller
         return['message' => 'user Deleted Successfully..'];
         
     }
+
+    // Controller class to search user
+    
     public function search()
     {
        if ($search = \Request::get('q')) {

@@ -138,6 +138,7 @@ export default {
     })
   }),
 
+//vform component error message here 
   components: {
     Button, HasError, AlertError
   },
