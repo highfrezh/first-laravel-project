@@ -16,7 +16,7 @@ import {
   AlertSuccess
 } from 'vform/src/components/bootstrap5'
 
-// vform components
+// vform build in  components
 Vue.component(AlertSuccess.name, AlertSuccess)
 Vue.component(AlertError.name, AlertError)
 Vue.component(AlertErrors.name, AlertErrors)
@@ -25,7 +25,7 @@ Vue.component(HasError.name, HasError)
 // Import VueRouter
 import VueRouter from 'vue-router'
 
-//Import moment 
+//Import moment for date formatting
 import moment from 'moment';
 
 //Import VueProgressBar
@@ -66,10 +66,12 @@ Vue.use(VueProgressBar, {
 
 Vue.use(VueRouter)  
 
+// vue filter to change charater to uppercase
 Vue.filter('upText', function (text) {
   return text.charAt(0).toUpperCase() + text.slice(1)
 });
 
+// vue filter with moment dependence for formatting date
 Vue.filter('myDate', function (created) {
   return moment().format('MMMM Do YYYY');
 });

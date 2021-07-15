@@ -24,10 +24,12 @@
                     </tr>
                   </thead>
                   <tbody>
+                    <!-- vform for looping through the user from the database "v-for="user in users.data" :key="user.id" -->
                     <tr v-for="user in users.data" :key="user.id">
                       <td>{{user.id}}</td>
                       <td>{{user.name}}</td>
                       <td>{{user.email}}</td>
+                      <!-- the upText use here is vue filter for text upperCase -->
                       <td>{{user.type | upText}}</td>
                       <td>{{user.created_at | myDate}}</td>
                       <td>
@@ -218,6 +220,7 @@ export default {
     loadUsers(){
       // Checking if the User is authorized before sendin HTTP Request
       if (this.$gate.isAdminOrAuthor()) {
+        // getting the data  from the controller using the route name (/api/user) then fetch the data to the user (this.users) object 
         axios.get("/api/user").then(({ data }) => (this.users = data)) 
       }
     },
