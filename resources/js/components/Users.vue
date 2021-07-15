@@ -31,6 +31,7 @@
                       <td>{{user.email}}</td>
                       <!-- the upText use here is vue filter for text upperCase -->
                       <td>{{user.type | upText}}</td>
+                      <!-- the myDate use here is vue filter Date formating -->
                       <td>{{user.created_at | myDate}}</td>
                       <td>
                        <a href="#" @click="editModal(user)">
@@ -145,6 +146,7 @@ export default {
     Button, HasError, AlertError
   },
 
+// All the method or function goes here
   methods: {
     getResults(page = 1) {
 			axios.get('api/user?page=' + page)
@@ -225,7 +227,7 @@ export default {
       }
     },
      createUser () {
-      this.$Progress.start()
+      this.$Progress.start() //progress bar start here
 
       this.form.post('/api/user')
       .then(()=>{
@@ -236,7 +238,7 @@ export default {
             icon: 'success',
             title: 'User created successfully'
           })
-        this.$Progress.finish();
+        this.$Progress.finish();  //progress bar finish here
 
       })
       

@@ -33,6 +33,7 @@ import VueProgressBar from 'vue-progressbar'
 
 //Import Sweetalert2
 import Swal from 'sweetalert2'
+// for global declaration i.e its accessble anywhere in the application
 window.swal = Swal;
 
 //Import Gate.js
@@ -64,6 +65,7 @@ Vue.use(VueProgressBar, {
   height: '3px'
 });
 
+// Telling vue we want use VueRouter
 Vue.use(VueRouter)  
 
 // vue filter to change charater to uppercase
@@ -73,7 +75,7 @@ Vue.filter('upText', function (text) {
 
 // vue filter with moment dependence for formatting date
 Vue.filter('myDate', function (created) {
-  return moment().format('MMMM Do YYYY');
+  return moment(created).format("MMMM Do YYYY"); 
 });
 
 let routes = [
