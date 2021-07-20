@@ -120,16 +120,18 @@
             </div>
           </div>
         </div>
+        <not-found :items="users.data" />
    </div>
 </template> 
  
 <script>
 //import Form from 'vform'
 import { Button, HasError, AlertError } from 'vform/src/components/tailwind'
+import NotFound from './NotFound.vue';
 export default {
   data: () => ({
     editMode: false,
-    users : {},
+    users : {}, //The users object Store the infomation coming from the suer form.
     form: new Form({
             id:       '',
             name:     '',
@@ -141,9 +143,12 @@ export default {
     })
   }),
 
-//vform component error message here 
+//vform component error message here and component registration
   components: {
-    Button, HasError, AlertError
+    Button,
+    HasError,
+    AlertError,
+    NotFound
   },
 
 // All the method or function goes here
@@ -155,7 +160,7 @@ export default {
 				});
 		}, 
 
-    //Edit Mode Method
+    // Method for Updating user to database after Edited from Edit Model
     updateUser(){
       this.$Progress.start()
       this.form.put('api/user/'+this.form.id)
@@ -168,7 +173,7 @@ export default {
                     'success'
                   )
                   this.$Progress.finish();
-                  Fire.$emit('AfterCreate');
+                  Fire.$emit('ReloadUserData');
 
       })
       .catch(() => {
@@ -183,7 +188,7 @@ export default {
       this.form.fill(user); //filling the user to the Modal
     },
 
-    // opening Modal Method
+    // opening Modal for new  user
     newModal(){
       this.editMode = false;
       this.form.reset();
@@ -204,13 +209,13 @@ export default {
 
             // sending Request to the server
             if (result.isConfirmed) {
-              this.form.delete('api/user/'+id).then(() => {
+              this.form.delete('api/users/'+id).then(() => {
                   swal.fire(
                     'Deleted!',
                     'Your file has been deleted.',
                     'success'
                   )
-              Fire.$emit('AfterCreate');
+              Fire.$emit('ReloadUserData');
                   }).catch(() => {
                     swal.fire("Failed", "There is something went wrong!.", "warning");
               });
@@ -230,14 +235,21 @@ export default {
       this.$Progress.start() //progress bar start here
 
       this.form.post('/api/user')
+      /*
+        .THEN()
+        .CATCH() 
+        Are ES6 promise that IF the condition is true the statement from the .THEN() with call back function will executed
+        ELSE .CATCH() with call back function will executed.
+      */
       .then(()=>{
-        Fire.$emit('AfterCreate');
+        Fire.$emit('ReloadUserData'); // Event listener for  sending HTTP Request to the serve
         $('#addNew').modal('hide') // hiding Modal after User Created
-  
+        // taost sweetalert2 begin here
         toast.fire({
-            icon: 'success',
+          icon: 'success',
             title: 'User created successfully'
           })
+          // taost sweetalert2 finish here
         this.$Progress.finish();  //progress bar finish here
 
       })
@@ -249,18 +261,20 @@ export default {
   },
    created() {
      Fire.$on('searching',() => {
+      //  $parent is refrenecing the parent of this file which is app.js
           let query = this.$parent.search;
           axios.get('api/findUser?q=' + query)
           .then((data) => {
             this.users = data.data
           })
           .catch(() =>{
-            //  axios.get("/api/user").then(({ data }) => (this.users = data));
+            
           })
     })
 
         this.loadUsers();
-        Fire.$on('AfterCreate',() => {
+        // Fire.$on send another Http request to reload the user if another user is created
+        Fire.$on('ReloadUserData',() => {
           this.loadUsers();
         })
       }

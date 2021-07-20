@@ -14,7 +14,7 @@
               <!-- Add the bg color to the header using any of the bg-* classes -->
               <div class="widget-user-header text-white" style="background-image:url('./img/user-cover.jpg')">
                 <h3 class="widget-user-username text-left">{{this.form.name}}</h3>
-                <h5 class="widget-user-desc text-left">{{ this.form.type }}</h5>
+                <!-- <h5 class="widget-user-desc text-left">{{ this.form.type }}</h5> -->
               </div>
               <div class="widget-user-image">
                 <img class="img-circle" :src="getProfilePhoto()" alt="User Avatar">
@@ -130,7 +130,7 @@
             name:     '',
             email:    '',
             password: '',
-            type:     '',
+            // type:     '', user type should not be display here for security purpose bcoz it can be change using Vue devtool.
             bio:      '',
             photo:    ''
     })
@@ -141,27 +141,36 @@
       },
 
       methods: {
+        // getting new image uploaded using tanury operator
         getProfilePhoto(){
           let photo = (this.form.photo.length > 200) ? this.form.photo : "/img/profile/"+ this.form.photo;
           return photo;
         },
          updateInfo(){
             this.$Progress.start()
+            // setting photo to undefined if it's null
+            if (this.form.password == '') {
+              this.form.password = undefined;
+            }
             this.form.put('api/profile')
             .then(() => {
-               this.$Progress.finish()
-               Fire.$emit('AfterCreate');
+              this.$Progress.finish()
+              Fire.$emit('ReloadUserData');
             })
             .catch(() => {
               this.$Progress.fail()
             });
          },
+
+        //  method for getting image uploaded 
          updateProfile(e){
             let file = e.target.files[0];
             //console.log(file.size);
             let reader = new FileReader();
+            // condition for checking file size
             if(file ['size'] <  1048576){
-               
+
+               //converting the image to base64
                reader.onloadend = (file) => {
                  //console.log('RESULT', reader.result)
                  this.form.photo = reader.result;
@@ -176,10 +185,13 @@
                   )
             }
          }
+         
       },
-
       created(){
           axios.get("/api/profile").then(({ data }) => (this.form.fill(data)))
+         Fire.$on('ReloadUserData',() => {
+          axios.get("/api/profile");
+        })
       }
    }
 </script>

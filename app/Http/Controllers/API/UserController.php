@@ -35,7 +35,7 @@ class UserController extends Controller
         // giving authority to Display user by only Admin.
        // $this->authorize('isAdmin');
           
-    // To grant authority to more than (for both Admin and author)one user to display User.
+    // To grant authority to more than (for both Admin and author) one user to display User Info.
     if (\Gate::allows('isAdmin') || \Gate::allows('isAuthor')) {
         return User::latest()->paginate(5);
     } 
@@ -79,7 +79,7 @@ class UserController extends Controller
        $this->validate($request, [
             'name' => 'required|string|max:191',
             'email' => 'required|string|email|max:191|unique:users,email,'.$user->id,
-            'password' => 'sometimes|required|string|min:6',
+            'password' => 'sometimes|required|min:6',
             ]);
             
        $currentPhoto = $user->photo;
@@ -88,10 +88,10 @@ class UserController extends Controller
         // converting the image string  and saving it.
 
         $name = time().'.'.explode('/', explode(':', substr($request->photo, 0, strpos($request->photo, ';')))[1])[1];
-
+        // Image Intervention package (image.intervention.io) for  converting base64 image
         \Image::make($request->photo)->save(public_path('img/profile/').$name);
 
-        //New name for Image to be upload 
+        //setting the image name to be upload to the database
         //$request->photo =$name;
         $request->merge(['photo' => $name]);
 
@@ -115,9 +115,10 @@ class UserController extends Controller
        return['message' => "Success"];
    }
 
-     //Profile Method to display info in user profile
+     // This Profile Method is to get authenticated login user info
     public function profile() 
     {
+        // user() is a buildin laravel function for Authentication
         return auth('api')->user();
     }    
 
@@ -146,7 +147,7 @@ class UserController extends Controller
 
          $this->validate($request, [
             'name' => 'required|string|max:191',
-            'email' => 'required|string|email|max:191|unique:users,email,'.$user->id,
+            'email' => 'required|string|email|max:191|unique:users,email,'.$user->id, // if the Email is the same or different it will fill it to database.
             'password' => 'sometimes|string|min:6',
             ]);
  
@@ -181,12 +182,16 @@ class UserController extends Controller
     
     public function search()
     {
+        // if the search is not empty the query will be set else it will return the normal users
        if ($search = \Request::get('q')) {
            $users = User::where(function($query) use ($search){
                $query->where('name','LIKE',"%$search%")->orWhere('email','LIKE',"%$search%")->orWhere('type','LIKE',"%$search%");
            })->paginate(20);
        }else {
-        $users = User::latest()->paginate(5);       }
+
+        $users = User::latest()->paginate(5);  
+    
+    }
         return $users;
         
     }

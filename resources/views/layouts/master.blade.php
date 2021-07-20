@@ -201,7 +201,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
 <!-- Disable some Vue Component if is not Admin Begin -->
 @auth
 <script>
-      window.user = @json(auth()->user())
+      window.user = @json(auth()->user()) //Assigning the authenticated user to window.user
 </script>
 @endauth
 <!-- Disable some Vue Component if is not Admin Finish -->

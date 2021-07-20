@@ -39,8 +39,11 @@ window.swal = Swal;
 //Import Gate.js
 import Gate from "./Gate";
 import _ from 'lodash';
+import vueProgressbar from 'vue-progressbar';
+//instance of new Gate
 Vue.prototype.$gate = new Gate(window.user);
 
+// sweetalert2 toaster importation
 const Toast = Swal.mixin({
   toast: true,
   position: 'top-end',
@@ -53,12 +56,13 @@ const Toast = Swal.mixin({
   }
 });
 
-//global Toast
-window.toast = Toast;
+//global Toast to be accessable any where in the application
+window.toast = Toast; //window.toast is use to access the the toast anywhere in the application
 
-//global Fire Vue
+//global Fire Vue for reloading from the database
 window.Fire = new Vue();
 
+// Telling the vue we want to use vueProgressbar
 Vue.use(VueProgressBar, {
   color: 'rgb(143, 255, 199)',
   failedColor: 'red',
@@ -80,6 +84,7 @@ Vue.filter('myDate', function (created) {
 
 let routes = [
   { path: '/dashboard', component: require('./components/Dashboard.vue').default },
+  { path: '/home', component: require('./components/Dashboard.vue').default },
   { path: '/profile', component: require('./components/Profile.vue').default },
   { path: '/developer', component: require('./components/Developer.vue').default },
   { path: '/users', component: require('./components/Users.vue').default },
@@ -93,7 +98,7 @@ const router = new VueRouter({
 })
 
 
-Vue.component('dashboard', require('./components/Dashboard.vue').default);
+// Vue.component('dashboard', require('./components/Dashboard.vue').default);
 
 // Not found Component
 Vue.component('not-found', require('./components/NotFound.vue').default);
@@ -108,7 +113,8 @@ const app = new Vue({
   data: {
       search: ''
   },
-  methods: {   
+  methods: {
+    //search functionality
     searchIt: _.debounce(() => {
       Fire.$emit('searching');
     },1000)
